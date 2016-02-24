@@ -15,8 +15,8 @@ function resetCfgSTA()
 	file.remove("configSTA.lua")
 	file.open("configSTA.lua","w+")
 	file.writeline("cfgSTA={")
-	file.writeline("ssid='Doit',")
-	file.writeline("psw='12345678',")
+	file.writeline("ssid='112',")
+	file.writeline("psw='REWQASDF',")
 	file.writeline("}")
 	file.close()
 end
@@ -108,7 +108,7 @@ function startSmartConfig(mode)
 end
 
 function checkKey()
-	if gpio.read(3)==0 then
+	if gpio.read(7)==0 then
 		keyCnt = keyCnt + 1
 		if keyCnt >= 50 then --long pressed
 			print("checkKey long pressed keyCnt: "..keyCnt)
@@ -124,9 +124,9 @@ function checkKey()
 end
 
 function gpioInit()
-	gpio.mode(0,gpio.OUTPUT) --led
-	gpio.write(0,gpio.LOW)
-	gpio.mode(3,gpio.INPUT)--flash
+	gpio.mode(3,gpio.OUTPUT) --led
+	gpio.write(3,gpio.LOW)
+	gpio.mode(7,gpio.INPUT)--flash
 	
 	keyCnt = 0
 	tmr.alarm(2,100,1,checkKey)

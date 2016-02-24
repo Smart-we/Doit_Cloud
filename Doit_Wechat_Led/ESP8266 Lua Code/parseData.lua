@@ -85,7 +85,7 @@ function split(str, delimiter)
 end
 
 --PWM初始化
-ledR=4;	ledB=2;	ledG=1
+ledR=4;	ledB=1;	ledG=8
 pwm.setup(ledR,1000,1023);pwm.start(ledR);
 pwm.setduty(ledR,1023);
 pwm.setup(ledG,1000,1023);pwm.start(ledG);
