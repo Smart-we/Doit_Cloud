@@ -108,7 +108,7 @@ function startSmartConfig(mode)
 end
 
 function checkKey()
-	if gpio.read(key)==0 then
+	if gpio.read(key)==1 then
 		keyCnt = keyCnt + 1
 		if keyCnt >= 50 then --long pressed
 			print("checkKey long pressed keyCnt: "..keyCnt)
