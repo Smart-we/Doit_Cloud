@@ -85,7 +85,15 @@ function split(str, delimiter)
 end
 
 --PWM初始化
+--3		GPIO0		led
+--4		GPIO2		ledR
+--1		GPIO4		ledB
+--8		GPIO15		ledG
+--7		GPIO13		key
+--5		GPIO14		relay
+led=3; key=7
 ledR=4;	ledB=1;	ledG=8
+--relay=5
 pwm.setup(ledR,1000,1023);pwm.start(ledR);
 pwm.setduty(ledR,1023);
 pwm.setup(ledG,1000,1023);pwm.start(ledG);
