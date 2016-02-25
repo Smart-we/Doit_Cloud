@@ -15,8 +15,8 @@ function resetCfgSTA()
 	file.remove("configSTA.lua")
 	file.open("configSTA.lua","w+")
 	file.writeline("cfgSTA={")
-	file.writeline("ssid='Doit',")
-	file.writeline("psw='12345678',")
+	file.writeline("ssid='112',")
+	file.writeline("psw='REWQASDF',")
 	file.writeline("}")
 	file.close()
 end
@@ -65,7 +65,7 @@ function startSmartConfig(mode)
 			dofile('httpserver.lc')
 		end
 		tmr.alarm(2,70,1,function()
-			if gpio.read(0)==1 then gpio.write(0,gpio.LOW) else gpio.write(0,gpio.HIGH) end
+			if gpio.read(led)==1 then gpio.write(led,gpio.LOW) else gpio.write(led,gpio.HIGH) end
 		end)
 	else --mode=0 or 1
 		wifi.setmode(wifi.STATION)
@@ -93,13 +93,13 @@ function startSmartConfig(mode)
 		ledCnt=0;ledCnt2=0;
 		tmr.alarm(2,300,1,function()
 			if mode==0 then --esp touch mode
-				if gpio.read(0)==1 then gpio.write(0,gpio.LOW) else gpio.write(0,gpio.HIGH) end
+				if gpio.read(led)==1 then gpio.write(led,gpio.LOW) else gpio.write(led,gpio.HIGH) end
 			else --air kiss mode
 				ledCnt = ledCnt + 1; if (ledCnt%3 == 0) then ledCnt2 = ledCnt2 + 1;end
 				if (ledCnt2%2==0) then
-					if gpio.read(0)==1 then gpio.write(0,gpio.LOW) else gpio.write(0,gpio.HIGH) end
+					if gpio.read(led)==1 then gpio.write(led,gpio.LOW) else gpio.write(led,gpio.HIGH) end
 				else
-					gpio.write(0,gpio.HIGH)
+					gpio.write(led,gpio.HIGH)
 				end
 			end
 			
@@ -124,9 +124,9 @@ function checkKey()
 end
 
 function gpioInit()
-	gpio.mode(0,gpio.OUTPUT) --led
-	gpio.write(0,gpio.LOW)
-	gpio.mode(3,gpio.INPUT)--flash
+	gpio.mode(led,gpio.OUTPUT) --led
+	gpio.write(led,gpio.LOW)
+	gpio.mode(key,gpio.INPUT)--flash
 	
 	keyCnt = 0
 	tmr.alarm(2,100,1,checkKey)
@@ -156,7 +156,7 @@ end
 tryCnt=0
 tmr.alarm(1,1000,1,function()
 	if wifi.sta.getip() == nil and tryCnt<60 then
-		if gpio.read(0)==1 then gpio.write(0,gpio.LOW) else gpio.write(0,gpio.HIGH) end
+		if gpio.read(led)==1 then gpio.write(led,gpio.LOW) else gpio.write(led,gpio.HIGH) end
 		print("Connecting:"..cfgSTA.ssid..'  '..tryCnt.."/60s")
 		tryCnt = tryCnt+1
 	else

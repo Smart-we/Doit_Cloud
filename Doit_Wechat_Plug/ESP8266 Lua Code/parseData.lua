@@ -32,7 +32,7 @@ function parseData(scktype,conn,data)
 			k=nil;vars=nil;k1=nil;k2=nil;collectgarbage()
 --处理UDP控制命令			
 		elseif string.find(data,'cmd=get') ~=nil then
-			local temp = (1-gpio.read(1))..'|'..(1-gpio.read(2))..'|'..(1-gpio.read(4))..'|'..(1-gpio.read(5))
+			local temp = (1-gpio.read(relay1))..'|'..(1-gpio.read(relay2))..'|'..(1-gpio.read(relay3))..'|'..(1-gpio.read(relay4))
 			conn:send("cmd=get&stat="..temp)
 			temp = nil
 		elseif string.find(data,'cmd=control&v=') ~=nil then
@@ -42,21 +42,21 @@ function parseData(scktype,conn,data)
 			print('var:'..var)
 			if #var>0 then
 				if var=='1|1' then
-					gpio.write(1,gpio.LOW)
+					gpio.write(relay1,gpio.LOW)
 				elseif var=='1|0' then
-					gpio.write(1,gpio.HIGH)
+					gpio.write(relay1,gpio.HIGH)
 				elseif var=='2|1' then
-					gpio.write(2,gpio.LOW)
+					gpio.write(relay2,gpio.LOW)
 				elseif var=='2|0' then
-					gpio.write(2,gpio.HIGH)
+					gpio.write(relay2,gpio.HIGH)
 				elseif var=='3|1' then
-					gpio.write(4,gpio.LOW)
+					gpio.write(relay3,gpio.LOW)
 				elseif var=='3|0' then
-					gpio.write(4,gpio.HIGH)
+					gpio.write(relay3,gpio.HIGH)
 				elseif var=='4|1' then
-					gpio.write(5,gpio.LOW)
+					gpio.write(relay4,gpio.LOW)
 				elseif var=='4|0' then
-					gpio.write(5,gpio.HIGH)
+					gpio.write(relay4,gpio.HIGH)
 				end
 			end
 			st=nil;var=nil
@@ -71,7 +71,7 @@ function parseData(scktype,conn,data)
 			conn:send('cmd=m2m_chat&device_id='..cfg.id..'&device_key='..cfg.key..'&topic='..cfg.id..'_chat\r\n');
 --返回插座当前状态
 	elseif string.find(data,'&message=get_stat') ~=nil then
-		local temp = (1-gpio.read(1))..'|'..(1-gpio.read(2))..'|'..(1-gpio.read(4))..'|'..(1-gpio.read(5))
+		local temp = (1-gpio.read(relay1))..'|'..(1-gpio.read(relay2))..'|'..(1-gpio.read(relay3))..'|'..(1-gpio.read(relay4))
 		conn:send('cmd=pope&device_id='..cfg.id..'&device_key='..cfg.key..'&message='..temp..'\r\n')
 		temp=nil
 --处理远程控制命令
@@ -82,21 +82,21 @@ function parseData(scktype,conn,data)
 		print('var:'..var)
 		if #var>0 then
 			if var=='1|1' then
-				gpio.write(1,gpio.LOW)
+				gpio.write(relay1,gpio.LOW)
 			elseif var=='1|0' then
-				gpio.write(1,gpio.HIGH)
+				gpio.write(relay1,gpio.HIGH)
 			elseif var=='2|1' then
-				gpio.write(2,gpio.LOW)
+				gpio.write(relay2,gpio.LOW)
 			elseif var=='2|0' then
-				gpio.write(2,gpio.HIGH)
+				gpio.write(relay2,gpio.HIGH)
 			elseif var=='3|1' then
-				gpio.write(4,gpio.LOW)
+				gpio.write(relay3,gpio.LOW)
 			elseif var=='3|0' then
-				gpio.write(4,gpio.HIGH)
+				gpio.write(relay3,gpio.HIGH)
 			elseif var=='4|1' then
-				gpio.write(5,gpio.LOW)
+				gpio.write(relay4,gpio.LOW)
 			elseif var=='4|0' then
-				gpio.write(5,gpio.HIGH)
+				gpio.write(relay4,gpio.HIGH)
 			end
 		end
 		st=nil;var=nil
@@ -104,7 +104,16 @@ function parseData(scktype,conn,data)
 end
 
 --初始化端口
-gpio.mode(1,gpio.OUTPUT);gpio.write(1,gpio.HIGH);
-gpio.mode(2,gpio.OUTPUT);gpio.write(2,gpio.HIGH);
-gpio.mode(4,gpio.OUTPUT);gpio.write(4,gpio.HIGH);
-gpio.mode(5,gpio.OUTPUT);gpio.write(5,gpio.HIGH);
+--3		GPIO0		led
+--7		GPIO13		key
+--1		GPIO4		relay1
+--4		GPIO2		relay2
+--5		GPIO14		relay3
+--8		GPIO15		relay4
+led=3; key=7
+relay1=1; relay2=4; relay3=5; relay4=8
+
+gpio.mode(relay1,gpio.OUTPUT);gpio.write(relay1,gpio.HIGH);
+gpio.mode(relay2,gpio.OUTPUT);gpio.write(relay2,gpio.HIGH);
+gpio.mode(relay3,gpio.OUTPUT);gpio.write(relay3,gpio.HIGH);
+gpio.mode(relay4,gpio.OUTPUT);gpio.write(relay4,gpio.HIGH);
