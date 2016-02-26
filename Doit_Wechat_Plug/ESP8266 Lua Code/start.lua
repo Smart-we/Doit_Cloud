@@ -108,7 +108,7 @@ function startSmartConfig(mode)
 end
 
 function checkKey()
-	if gpio.read(3)==1 then
+	if gpio.read(key)==1 then
 		keyCnt = keyCnt + 1
 		if keyCnt >= 50 then --long pressed
 			print("checkKey long pressed keyCnt: "..keyCnt)
@@ -167,7 +167,7 @@ tmr.alarm(1,1000,1,function()
 		else
 			tryCnt=nil;collectgarbage()
 			print("Connected:"..wifi.sta.getip())
-			gpio.write(0,gpio.LOW)
+			gpio.write(led,gpio.LOW)
 			dofile("doNetTask.lc")
 		end
 	end
