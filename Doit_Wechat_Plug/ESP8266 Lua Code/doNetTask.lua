@@ -32,9 +32,9 @@ tmr.alarm(0, 5000, 1, function()
 	if flagConnected==false then
 	print("Try connect Server")
 	conn = nil
-	conn=net.createConnection(net.TCP, false) 
-	conn:connect(cfg.port,cfg.domain);
-	conn:on("connection",function(c) 
+	conn=net.createConnection(net.TCP, false)--创建一个client
+	conn:connect(cfg.port,cfg.domain);--连接至远端
+	conn:on("connection",function(c)--向事件注册回调函数，事件可为"connection", "reconnection", "disconnection", "receive", "sent"
 		print("TCPClient:conneted to server");
 		flagConnected = true;
 		c:send('cmd=subscribe&device_id='..cfg.id..'&device_key='..cfg.key..'\r\n')
